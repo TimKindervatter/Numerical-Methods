@@ -92,7 +92,7 @@ def create_formed_half_space(x, y, function, inverted=False):
         x (ndarray): Numpy array of points along the x-axis
         y (ndarray): Numpy array of points along the y-axis
         function (function): A function object, which will operate on x to obtain a boundary
-        inverted (bool): False by default, wherein all elements above the boundary are set to 1. If inverted is True, all elements below the boundary are set to 1.
+        inverted (bool): False by default, wherein all elements below the boundary are set to 1. If inverted is True, all elements above the boundary are set to 1.
     
     Returns:
         None
