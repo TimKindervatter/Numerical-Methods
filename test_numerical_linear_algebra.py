@@ -13,7 +13,9 @@ test_cases = [A1, A2, A3, pytest.param(A4, marks=pytest.mark.xfail(strict=True))
 n = np.random.randint(1,100)
 random_tests = [np.random.randn(n,n) for _ in range(10)]
 
-@pytest.mark.parametrize('A', test_cases)
+all_tests = test_cases + random_tests
+
+@pytest.mark.parametrize('A', all_tests)
 def test_gaussian_elimination(A):
     b = np.ones(len(A))
     
@@ -27,7 +29,7 @@ def test_gaussian_elimination(A):
     
     assert(np.allclose(x1,x2))
     
-@pytest.mark.parametrize('A', [A1])
+@pytest.mark.parametrize('A', all_tests)
 def test_gauss_jordan_solve(A):
     b = np.ones(len(A))
     
@@ -41,7 +43,7 @@ def test_gauss_jordan_solve(A):
     
     assert(np.allclose(x1,x2))
     
-@pytest.mark.parametrize('A', [A1])
+@pytest.mark.parametrize('A', all_tests)
 def test_gauss_jordan_invert(A):
     if type(A) is not np.ndarray:
         A = np.array(A)
