@@ -41,7 +41,27 @@ def gaussian_elimination(A,b):
 
 
 def gauss_jordan(A,b=None):
-    if not b:
-        b = identity(A.shape[0])
+    if type(A) is not np.ndarray:
+        A = np.array(A)
+        
+    m = A.shape[0]
+    
+    if b is None:
+        b = np.identity(m)
+    else:
+        if type(b) is not np.ndarray:
+            b = np.array(b)
         
     aug = np.c_[A,b]
+    for row in range(m):
+        aug[row] = aug[row]/aug[row,row]
+        for i in range(m):
+            if i != row:
+                aug[i] -= aug[i,row]*aug[row]
+            
+    if np.allclose(b, np.identity(m)):
+        return aug[:,-m:]
+    else:
+        return aug[:,-1]
+    
+                
