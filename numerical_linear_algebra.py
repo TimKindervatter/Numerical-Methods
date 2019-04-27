@@ -17,7 +17,7 @@ def ref(A,b):
 def back_sub(ref_matrix):
     m = ref_matrix.shape[0]
     x = np.empty([1,m])
-    for row in reversed(range(3)):
+    for row in reversed(range(m)):
         signs = -np.ones([1,m])
         signs[0,row] = -signs[0,row]
         ref_matrix[row,:-1] = signs*ref_matrix[row,:-1]
@@ -32,7 +32,13 @@ def back_sub(ref_matrix):
 
 
 def gaussian_elimination(A,b):
+
+    
     row_echelon_matrix = ref(A,b)
     x = back_sub(row_echelon_matrix)
     
     return x
+
+
+def gauss_jordan(A,b):
+    pass
