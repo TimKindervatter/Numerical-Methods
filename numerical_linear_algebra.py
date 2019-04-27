@@ -32,7 +32,7 @@ def back_sub(ref_matrix):
 
 
 def gaussian_elimination(A,b):
-
+    assert(np.linalg.det(A) != 0)
     
     row_echelon_matrix = ref(A,b)
     x = back_sub(row_echelon_matrix)
