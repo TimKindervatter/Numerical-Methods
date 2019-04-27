@@ -40,5 +40,8 @@ def gaussian_elimination(A,b):
     return x
 
 
-def gauss_jordan(A,b):
-    pass
+def gauss_jordan(A,b=None):
+    if not b:
+        b = identity(A.shape[0])
+        
+    aug = np.c_[A,b]
