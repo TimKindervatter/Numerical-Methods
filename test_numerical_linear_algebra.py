@@ -25,7 +25,7 @@ def test_gaussian_elimination(A):
             
     x2 = nla.gaussian_elimination(A,b)
     
-    assert(np.all(np.isclose(x1,x2)))
+    assert(np.allclose(x1,x2))
     
 @pytest.mark.parametrize('A', [A1])
 def test_gauss_jordan_solve(A):
@@ -39,7 +39,7 @@ def test_gauss_jordan_solve(A):
             
     x2 = nla.gauss_jordan(A,b)
     
-    assert(np.all(np.isclose(x1,x2)))
+    assert(np.allclose(x1,x2))
     
 @pytest.mark.parametrize('A', [A1])
 def test_gauss_jordan_invert(A):
