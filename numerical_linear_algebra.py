@@ -20,7 +20,7 @@ def ref(A,b):
 
 def back_sub(U, y):
     m = U.shape[0]
-    x = np.empty([1,m])
+    x = np.empty(m)
     ref_matrix = np.c_[U,y]
     
     for row in reversed(range(m)):
@@ -30,30 +30,26 @@ def back_sub(U, y):
         
         temp_sum = 0
         for i in range(row+1,m):
-            temp_sum += ref_matrix[row,i]*x[0,i]
+            temp_sum += ref_matrix[row,i]*x[i]
             
-        x[0,row] = (temp_sum + ref_matrix[row,-1])/ref_matrix[row,row]
+        x[row] = (temp_sum + ref_matrix[row,-1])/ref_matrix[row,row]
         
     return x
 
 
 def forward_sub(L,b):
     m = L.shape[0]
-    d = np.empty([1,m])
+    d = np.empty(m)
     ref_matrix = np.c_[L,b]
     
+    d[0] = ref_matrix[0,0]
     
-    
-    for row in range(m):
-        signs = -np.ones([1,m])
-        signs[0,row] = -signs[0,row]
-        ref_matrix[row,:-1] = signs*ref_matrix[row,:-1]
-        
-        temp_sum = 0
-        for i in range(row+1,m):
-            temp_sum += ref_matrix[row,i]*d[0,i]
+    for row in range(1,m):
+        temp_sum = b[row]
+        for i in range(row):
+            temp_sum -= ref_matrix[row,i]*d[i]
             
-        d[0,row] = (temp_sum + ref_matrix[row,-1])/ref_matrix[row,row]
+        d[row] = temp_sum
         
     return d
 
