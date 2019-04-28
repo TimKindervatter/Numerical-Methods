@@ -22,6 +22,22 @@ def test_ref(A):
     L,U,_ = nla.ref(A,b)
     
     assert(np.allclose(L@U, A))
+    
+  
+@pytest.mark.parametrize('A', all_tests)
+def test_forward_sub(A):
+    b = np.ones(len(A))
+    L,_,_ = nla.ref(A,b)
+    
+    try:
+        d1 = np.linalg.solve(L,b)
+    except np.linalg.LinAlgError as err:
+        if 'Singular matrix' in str(err):
+            d1 = np.full(len(L), np.nan)
+            
+    d2 = nla.forward_sub(L,b)
+    
+    assert(np.allclose(d1,d2))
 
 
 @pytest.mark.parametrize('A', all_tests)
