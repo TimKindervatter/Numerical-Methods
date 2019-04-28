@@ -6,6 +6,8 @@ def ref(A,b):
     if type(b) is not np.ndarray:
         b = np.array(b)
         
+    assert(np.linalg.det(A) != 0)
+        
     aug = np.ndarray.astype(np.c_[A,b],float)
     L = np.identity(A.shape[0])
     for row in range(1,aug.shape[0]):
@@ -67,6 +69,8 @@ def gauss_jordan(A,b=None):
     if type(A) is not np.ndarray:
         A = np.array(A)
         
+    assert(np.linalg.det(A) != 0)
+    
     m = A.shape[0]
     
     if b is None:
@@ -88,5 +92,11 @@ def gauss_jordan(A,b=None):
         return aug[:,-1]
     
 
-def lu():
-    pass            
+def lu(A,b):
+    assert(np.linalg.det(A) != 0)
+    
+    L,U,_ = ref(A,b)
+    d = forward_sub(L,b)
+    x = back_sub(U,d)
+    
+    return x
