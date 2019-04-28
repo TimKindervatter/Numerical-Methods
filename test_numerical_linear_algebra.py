@@ -15,6 +15,15 @@ random_tests = [np.random.randn(n,n) for _ in range(10)]
 
 all_tests = test_cases + random_tests
 
+
+@pytest.mark.parametrize('A', all_tests)
+def test_ref(A):
+    b = np.ones(len(A))
+    L,U,_ = nla.ref(A,b)
+    
+    assert(np.allclose(L@U, A))
+
+
 @pytest.mark.parametrize('A', all_tests)
 def test_gaussian_elimination(A):
     b = np.ones(len(A))
@@ -28,6 +37,7 @@ def test_gaussian_elimination(A):
     x2 = nla.gaussian_elimination(A,b)
     
     assert(np.allclose(x1,x2))
+    
     
 @pytest.mark.parametrize('A', all_tests)
 def test_gauss_jordan_solve(A):
@@ -43,6 +53,7 @@ def test_gauss_jordan_solve(A):
     
     assert(np.allclose(x1,x2))
     
+    
 @pytest.mark.parametrize('A', all_tests)
 def test_gauss_jordan_invert(A):
     if type(A) is not np.ndarray:
@@ -53,3 +64,18 @@ def test_gauss_jordan_invert(A):
     
     assert(np.all(np.isclose(A_inv@A, np.identity(m))))
     assert(np.all(np.isclose(A@A_inv, np.identity(m))))
+    
+
+@pytest.mark.parametrize('A', [A1])
+def test_lu(A):
+    b = np.ones(len(A))
+    
+    try:
+        x1 = np.linalg.solve(A,b)
+    except np.linalg.LinAlgError as err:
+        if 'Singular matrix' in str(err):
+            x1 = np.full(len(A), np.nan)
+            
+    x2 = nla.lu(A,b)
+    
+    assert(np.allclose(x1,x2))
