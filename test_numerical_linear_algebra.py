@@ -38,6 +38,22 @@ def test_forward_sub(A):
     d2 = nla.forward_sub(L,b)
     
     assert(np.allclose(d1,d2))
+    
+    
+@pytest.mark.parametrize('A', all_tests)
+def test_back_sub(A):
+    b = np.ones(len(A))
+    _,U,_ = nla.ref(A,b)
+    
+    try:
+        x1 = np.linalg.solve(U,b)
+    except np.linalg.LinAlgError as err:
+        if 'Singular matrix' in str(err):
+            x2 = np.full(len(U), np.nan)
+            
+    x2 = nla.back_sub(U,b)
+    
+    assert(np.allclose(x1,x2))
 
 
 @pytest.mark.parametrize('A', all_tests)
@@ -82,7 +98,7 @@ def test_gauss_jordan_invert(A):
     assert(np.all(np.isclose(A@A_inv, np.identity(m))))
     
 
-@pytest.mark.parametrize('A', [A1])
+@pytest.mark.parametrize('A', all_tests)
 def test_lu(A):
     b = np.ones(len(A))
     
