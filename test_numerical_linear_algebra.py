@@ -111,3 +111,26 @@ def test_lu(A):
     x2 = nla.lu(A,b)
     
     assert(np.allclose(x1,x2))
+    
+    
+A5 = np.array([[10,3,1], [2,9,5], [0,4,7]]) #Non-singular, diagonally dominant ndarray
+A2 = [[4,2,6,2], [6,7,2,1], [3,7,1,4], [1,6,2,8]] #Non-singular, non-diagonally dominant list of lists
+A3 = np.identity(10)
+A4 = np.zeros([2,2]) #Singular, expected to fail
+
+jacobi_test_cases = [A5, pytest.param(A2, marks=pytest.mark.xfail(strict=True)),
+              A3, pytest.param(A4, marks=pytest.mark.xfail(strict=True))]
+ 
+@pytest.mark.parametrize('A', jacobi_test_cases)
+def test_jacobi(A):
+    b = np.ones(len(A))
+    
+    try:
+        x1 = np.linalg.solve(A,b)
+    except np.linalg.LinAlgError as err:
+        if 'Singular matrix' in str(err):
+            x1 = np.full(len(A), np.nan)
+            
+    x2 = nla.jacobi(A,b)
+    
+    assert(np.allclose(x1,x2))
