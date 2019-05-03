@@ -100,3 +100,29 @@ def lu(A,b):
     x = back_sub(U,d)
     
     return x
+
+
+def jacobi(A,b):
+    assert(is_diagonally_dominant(A)), "Input matrix must be diagonally dominant."
+    x = np.ones(len(A))
+    
+    D = np.diag(np.diag(A))
+    eps = 1
+    
+    while eps > 1e-10:
+        dx = np.linalg.solve(D, (b-A@x))
+        x = x + dx
+        
+        eps = max(abs(dx/x))
+        
+    return x
+
+
+def is_diagonally_dominant(A):
+    D = np.diag(A)
+    S = np.sum(np.abs(A), axis=1) - D
+    
+    if np.all(D > S):
+        return True
+    else:
+        return False
