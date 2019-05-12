@@ -1,4 +1,5 @@
 import numpy as np
+from autograd import grad
 
 class RootNotFoundError(Exception):
     """Raised if the sign of the function does not change in the specified interval."""
@@ -12,9 +13,7 @@ def bisection_method(f,bounds):
 
 
 def false_position_method(f,bounds):
-    def false_position(xl, xu):
-        print(f(xu) - f(xl))
-        return (xl + xu)/2 - (((f(xu)) + f(xl))/(f(xu) - f(xl)))*((xu - xl)/2)
+    false_position =  lambda xl, xu: (xl + xu)/2 - (((f(xu)) + f(xl))/(f(xu) - f(xl)))*((xu - xl)/2)
     return bracketing_method(f, bounds, false_position)
 
 
@@ -46,10 +45,19 @@ def bracketing_method(f, bounds, iteration_method):
         elif f(x_old) == 0:
             return x_old
         else:
-            raise RootNotFoundError("The sign did not change in the given interval. This indicates either no root or an even root.")
+            try:
+                u = lambda x: f(x)/grad(f)(x + 1e-10)
+                return bracketing_method(u, bounds, iteration_method)
+            except:
+                raise RootNotFoundError("No root was found within the given interval.")
             
         xnew = iteration_method(xl, xu)
         
         delta_x = abs((xnew - x_old)/(x_old + 1e-10))
         
     return xnew
+
+
+if __name__ == '__main__':
+    f = lambda x: (x - 2)**2
+    false_position_method(f, [1,4])
