@@ -10,13 +10,13 @@ test_cases = [t1, t2, t3, pytest.param(*t4, marks=pytest.mark.xfail)]
 
 @pytest.mark.parametrize('f, bounds, expected', test_cases)
 def test_bisection_method(f, bounds, expected):
-    r = rf.bisection_method(f,bounds)
+    r = rf.bracketing_method(f,bounds,'bisection')
     
     assert(np.isclose(r, expected))
     
     
 @pytest.mark.parametrize('f, bounds, expected', test_cases)
 def test_false_position_method(f, bounds, expected):
-    r = rf.false_position_method(f,bounds)
+    r = rf.bracketing_method(f,bounds,'false position')
     
     assert(np.isclose(r, expected))
