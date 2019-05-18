@@ -1,3 +1,4 @@
+#%%
 import numpy as np
 from autograd import grad
 
@@ -72,12 +73,17 @@ def bracketing_method(f, bounds, iteration_method):
                 raise RootNotFoundError("No root was found within the given interval.")
             
         xnew = update_root(xl, xu)
-        
         delta_x = abs((xnew - x_old)/(x_old + 1e-10))
-        
-    return xnew
+        return xnew
 
 
-if __name__ == '__main__':
-    f = lambda x: (x - 2)**2
-    bracketing_method(f, [1,4],'false_position')
+def newton_raphson(f, initial_guess):
+    pass
+
+
+def secant_method(f, initial_guess):
+    pass
+
+
+def open_method(f, initial_guess, iteration_method):
+    pass
