@@ -78,26 +78,41 @@ def bracketing_method(f, bounds, iteration_method):
 
 
 def newton_raphson(f, initial_guess):
-    open_method(f, initial_guess, 'newton raphson')
+    xr = initial_guess
 
-
-def secant_method(f, initial_guess):
-    pass
-
-
-def open_method(f, initial_guess, iteration_method):
     tolerance = 1e-10
     dx = np.inf
 
-    if iteration_method == 'newton raphson':
-        update = lambda x: f(x)/grad(f)(x + 1e-10)
-        xr = initial_guess
-    
+    update_root = lambda x: f(x)/grad(f)(x + 1e-10)
+
     iterations = 0
     while np.abs(dx) > tolerance:
-        dx = update(xr)
+        dx = update_root(xr)
         xr = xr - dx
         iterations += 1
         if iterations > 1000:
             raise RootNotFoundError("The algorithm did not converge within 1000 iterations, operation aborted.")
+    
     return xr
+
+
+def secant_method(f, guess_1, guess_2):
+    x1 = guess_1
+    x2 = guess_2
+
+    tolerance = 1e-10
+    dx = np.inf
+
+    update_root = lambda x1, x2: (f(x2)/(f(x2) - f(x1)))*(x2 - x1)
+
+    iterations = 0
+    while np.abs(dx) > tolerance:
+        dx = update_root(x1, x2)
+        x1 = x2
+        x2 = x2 - dx
+        iterations += 1
+        if iterations > 1000:
+            raise RootNotFoundError("The algorithm did not converge within 1000 iterations, operation aborted.")
+
+        return x2
+    
