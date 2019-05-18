@@ -1,4 +1,3 @@
-#%%
 import numpy as np
 from autograd import grad
 
@@ -74,11 +73,11 @@ def bracketing_method(f, bounds, iteration_method):
             
         xnew = update_root(xl, xu)
         delta_x = abs((xnew - x_old)/(x_old + 1e-10))
-        return xnew
+    return xnew
 
 
 def newton_raphson(f, initial_guess):
-    pass
+    open_method(f, initial_guess, 'newton_raphson')
 
 
 def secant_method(f, initial_guess):
@@ -86,4 +85,12 @@ def secant_method(f, initial_guess):
 
 
 def open_method(f, initial_guess, iteration_method):
-    pass
+    xr = initial_guess
+    tolerance = 1e-10
+    dx = np.inf
+    update = lambda x: f(x)/grad(f)(x + 1e-10)
+    while dx > tolerance:
+        dx = update(xr)
+        xr = xr - dx
+        
+    return xr
