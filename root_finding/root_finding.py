@@ -1,8 +1,9 @@
+#%%
 import numpy as np
 from autograd import grad
 
 class RootNotFoundError(Exception):
-    """Raised if the sign of the function does not change in the specified interval."""
+    """Raised if the root finding algorithm fails to converge to a root."""
     def __init__(self, message):
         super().__init__(message)
     
@@ -77,7 +78,7 @@ def bracketing_method(f, bounds, iteration_method):
 
 
 def newton_raphson(f, initial_guess):
-    open_method(f, initial_guess, 'newton_raphson')
+    open_method(f, initial_guess, 'newton raphson')
 
 
 def secant_method(f, initial_guess):
@@ -85,12 +86,18 @@ def secant_method(f, initial_guess):
 
 
 def open_method(f, initial_guess, iteration_method):
-    xr = initial_guess
     tolerance = 1e-10
     dx = np.inf
-    update = lambda x: f(x)/grad(f)(x + 1e-10)
-    while dx > tolerance:
+
+    if iteration_method == 'newton raphson':
+        update = lambda x: f(x)/grad(f)(x + 1e-10)
+        xr = initial_guess
+    
+    iterations = 0
+    while np.abs(dx) > tolerance:
         dx = update(xr)
         xr = xr - dx
-        
+        iterations += 1
+        if iterations > 1000:
+            raise RootNotFoundError("The algorithm did not converge within 1000 iterations, operation aborted.")
     return xr

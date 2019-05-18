@@ -26,12 +26,12 @@ t1 = (lambda x: x + 3, 1, -3) #Function has one root, root within interval
 t2 = (lambda x: x**2 - 4, 1, 2) #Function has two roots, one root within interval
 t3 = (lambda x: (x-2)**2, 1, 2) #Double root at x = 2
 t4 = (lambda x: x**4 + 4, 1, 0) #Function has no roots, expected to fail
-test_cases = [t1, t2]#, t3, pytest.param(*t4, marks=pytest.mark.xfail)]
+test_cases = [t1, t2, t3, pytest.param(*t4, marks=pytest.mark.xfail)]
 
 
 @pytest.mark.parametrize('f, initial_guess, expected', test_cases)
 def test_newton_raphson(f, initial_guess, expected):
-    r = rf.open_method(f, initial_guess, 'newton_raphson')
+    r = rf.open_method(f, initial_guess, 'newton raphson')
 
     assert(np.isclose(r, expected))
 
